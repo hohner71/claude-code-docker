@@ -8,6 +8,11 @@ RUN apt-get update && apt-get install -y \
     curl \
     procps \
     vim \
+    chromium \
+    fonts-noto-cjk \
+    fonts-ipafont \
+    python3-pip \
+    && pip3 install feedparser rich --break-system-packages \
     && rm -rf /var/lib/apt/lists/*
 
 # Claude Code をグローバルにインストール

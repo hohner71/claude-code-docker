@@ -30,6 +30,10 @@ fi
 # Claude 設定の永続化ディレクトリを用意（テーマ・信頼フォルダ等の選択結果を保存）
 mkdir -p "$(pwd)/.claude-home"
 
+# /root/.claude.json（信頼フォルダ承認・オンボーディング状態）の永続化ファイルを用意
+# 起動時にコンテナの /root/.claude.json へバインドマウントする
+[ ! -f "$(pwd)/.claude-home/dot-claude.json" ] && echo '{}' > "$(pwd)/.claude-home/dot-claude.json"
+
 # ===== 追加マウント（参照フォルダ）の対話入力 =====
 EXTRA_MOUNT_ARGS=()
 echo ""
@@ -66,7 +70,9 @@ if [ $# -eq 0 ]; then
         --name claude-pc \
         -v "$(pwd):/work" \
         -v "$(pwd)/.claude-home:/root/.claude" \
+        -v "$(pwd)/.claude-home/dot-claude.json:/root/.claude.json" \
         -v "/Users/hahiro/Desktop/youtube_output:/youtube_output" \
+        -v "/Users/hahiro/Desktop/hohner-share:/hohner-share:ro" \
         -v "/Users/hahiro/Desktop/hohner-share/memory/hohner-share:/work/memory" \
         -v "/Users/hahiro/Desktop/hohner-share/memory/hohner-share:/root/.claude/projects/-work/memory" \
         "${EXTRA_MOUNT_ARGS[@]}" \
@@ -78,7 +84,9 @@ else
         --name claude-pc \
         -v "$(pwd):/work" \
         -v "$(pwd)/.claude-home:/root/.claude" \
+        -v "$(pwd)/.claude-home/dot-claude.json:/root/.claude.json" \
         -v "/Users/hahiro/Desktop/youtube_output:/youtube_output" \
+        -v "/Users/hahiro/Desktop/hohner-share:/hohner-share:ro" \
         -v "/Users/hahiro/Desktop/hohner-share/memory/hohner-share:/work/memory" \
         -v "/Users/hahiro/Desktop/hohner-share/memory/hohner-share:/root/.claude/projects/-work/memory" \
         "${EXTRA_MOUNT_ARGS[@]}" \
